@@ -2,7 +2,8 @@
     "name": "deseretdigital/smartystreets-php-sdk",
     "description": "API client for SmartyStreets service",
     "require": {
-        "deseretdigital/framework": "dev-composerize"
+        "deseretdigital/framework": "dev-composerize",
+        "ext-curl": "*"
     },
 
     "require-dev": {
