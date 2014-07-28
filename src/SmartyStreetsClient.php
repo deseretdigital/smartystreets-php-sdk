@@ -50,7 +50,7 @@ class SmartyStreetsClient
                     "delivery_line_2": "PO Box 42",
                     "last_line": "Cupertino CA 95014-2083",
                     "delivery_point_barcode": "950142083017",
-                    "input_id": "' . $location['id'] . '",
+                    "input_id": "' . $location['input_id'] . '",
                     "components": {
                         "primary_number": "1",
                         "street_name": "Infinite",
