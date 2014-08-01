@@ -11,7 +11,7 @@ class SmartyStreetsClient extends \Zend_Http_Client
 
     protected $clientConfig = array();
 
-    protected $localIniKey = 'api';
+    protected $localIniKey = 'smartystreets';
 
     protected $clientConfigParams = array(
         'authId'    => 1,
@@ -66,8 +66,8 @@ class SmartyStreetsClient extends \Zend_Http_Client
     public function injectAuthParams()
     {
         // Add in auth id and token
-        $this->setParameterGet('auth-id', $this->config['authId']);
-        $this->setParameterGet('auth-token', $this->config['authToken']);
+        $this->setParameterGet('auth-id', $this->$this->clientConfig['authId']);
+        $this->setParameterGet('auth-token', $this->$this->clientConfig['authToken']);
     }
 
     /**
