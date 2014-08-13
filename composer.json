@@ -2,7 +2,7 @@
     "name": "deseretdigital/smartystreets-php-sdk",
     "description": "API client for SmartyStreets service",
     "require": {
-        "deseretdigital/framework": "dev-composerize"
+      "guzzlehttp/guzzle": "4.*"
     },
 
     "require-dev": {
@@ -15,22 +15,10 @@
         "raveren/kint": "dev-1.0.0-wip"
     },
 
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "git@github.com:deseretdigital/framework.git"
-        }
-    ],
-
     "autoload": {
-        "classmap": [
-            "src"
-        ],
         "psr-4": {
-            "DDM\\Api\\SmartyStreets\\": "src/"
+            "DDM\\SmartyStreets\\": "src/"
         }
-    },
-
-    "include-path": ["vendor/deseretdigital/framework/zend/library/"]
+    }
 
 }
