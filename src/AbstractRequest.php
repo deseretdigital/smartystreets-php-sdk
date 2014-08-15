@@ -2,7 +2,7 @@
 
 namespace DDM\SmartyStreets;
 
-use GuzzleHttp\Client as GuzzleClient;
+use Zend\Http\Client as ZendHttpClient;
 
 /**
  *
@@ -63,7 +63,7 @@ abstract class AbstractRequest
    * @param [type] $authId    [description]
    * @param [type] $client    [description]
    */
-  public function __construct($authToken, $authId, \GuzzleHttp\Client $client = null)
+  public function __construct($authToken, $authId, \Zend\Http\Client $client = null)
   {
       $this->setAuthToken($authToken);
       $this->setAuthId($authId);
@@ -98,16 +98,16 @@ abstract class AbstractRequest
    */
   public function getDefaultClient()
   {
-    return new GuzzleClient(
+    return new ZendHttpClient(
       ['base_url' => $this->baseUrl]
     );
   }
 
   /**
    * Set the client
-   * @param \GuzzleHttp\Client $client
+   * @param \Zend\Http\Client $client
    */
-  public function setClient(\GuzzleHttp\Client $client)
+  public function setClient(\Zend\Http\Client $client)
   {
     $this->client = $client;
   }
