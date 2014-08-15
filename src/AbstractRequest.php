@@ -2,6 +2,7 @@
 
 namespace DDM\SmartyStreets;
 
+use Zend\Http\Request as ZendHttpRequest;
 use Zend\Http\Client as ZendHttpClient;
 
 /**
@@ -98,9 +99,10 @@ abstract class AbstractRequest
    */
   public function getDefaultClient()
   {
-    return new ZendHttpClient(
-      ['base_url' => $this->baseUrl]
-    );
+    $client = new ZendHttpClient();
+    $client->setUri($this->baseUrl);
+
+    return $client;
   }
 
   /**
@@ -146,16 +148,23 @@ abstract class AbstractRequest
    */
   public function send()
   {
-    $client = $this->getClient();
     $options = [
         'query'   => $this->getQueryParams(),
         'headers' => $this->getHeaders(),
         'body'    => $this->getBody(),
     ];
-    $bodyAsString = true;
+    $request = new Request();
+
+    $client = $this->getClient();
+    $client->setParameterPost($options);
+
+    $client->setRequest($request);
+    $response = $client->dispatch();
+
+    /*$bodyAsString = true;
     $result = json_decode($client->post($this->endpoint,$options)->getBody($bodyAsString));
     $response = $this->getResponse();
-    $response->setBody($result);
+    $response->setBody($result);*/
 
     return $response;
   }
