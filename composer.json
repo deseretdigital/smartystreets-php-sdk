@@ -3,7 +3,10 @@
     "description": "API client for SmartyStreets service",
     "require": {
         "zendframework/zend-config": "2.0.*",
-        "zendframework/zend-http": "2.0.*"
+        "zendframework/zend-http": "2.0.*",
+        "zendframework/zend-uri": "2.0.*",
+        "zendframework/zend-validator": "2.0.*",
+        "zendframework/zend-i18n": "2.0.*"
     },
 
     "require-dev": {
@@ -13,7 +16,9 @@
 
         "mockery/mockery": "dev-master@dev",
 
-        "raveren/kint": "dev-1.0.0-wip"
+        "raveren/kint": "dev-1.0.0-wip",
+
+        "ext-intl": "*"
     },
 
     "repositories": [
