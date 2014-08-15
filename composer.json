@@ -2,11 +2,7 @@
     "name": "deseretdigital/smartystreets-php-sdk",
     "description": "API client for SmartyStreets service",
     "require": {
-        "zendframework/zend-config": "2.0.*",
-        "zendframework/zend-http": "2.0.*",
-        "zendframework/zend-uri": "2.0.*",
-        "zendframework/zend-validator": "2.0.*",
-        "zendframework/zend-i18n": "2.0.*"
+        "zendframework2/zend-http": "2.0.*"
     },
 
     "require-dev": {
