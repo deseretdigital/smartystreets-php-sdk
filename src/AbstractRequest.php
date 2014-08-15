@@ -153,7 +153,7 @@ abstract class AbstractRequest
         'headers' => $this->getHeaders(),
         'body'    => $this->getBody(),
     ];
-    $request = new Request();
+    $request = new ZendHttpRequest();
 
     $client = $this->getClient();
     $client->setParameterPost($options);
