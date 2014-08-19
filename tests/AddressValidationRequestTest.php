@@ -2,10 +2,9 @@
 
 namespace DDM\SmartyStreets;
 
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Subscriber\Mock as GuzzleMock;
-use GuzzleHttp\Message\Response;
-use GuzzleHttp\Stream\Stream;
+use Guzzle\Http\Client as GuzzleClient;
+use Guzzle\Http\Message\Response;
+use Guzzle\Http\Stream\Stream;
 
 
 class ValidationRequestTest extends \PHPUnit_Framework_TestCase
@@ -13,10 +12,20 @@ class ValidationRequestTest extends \PHPUnit_Framework_TestCase
 
   public function setUp()
   {
-    $guzzleClient = new GuzzleClient();
+    $this->guzzleClientMock = \Mockery::mock('\\Guzzle\\HTTP\\Client');
+    $this->guzzleRequestMock = \Mockery::mock('\\Guzzle\\Http\\Message\\Request');
+    $this->guzzleResponseMock = \Mockery::mock('\\Guzzle\\Http\\Message\\Response');
 
-    $this->guzzleClient = $guzzleClient;
-    $this->smartyRequest = new AddressValidationRequest('','', $guzzleClient);
+    $this->smartyRequest = new AddressValidationRequest('','', $this->guzzleClientMock);
+  }
+
+  /**
+   * Tears down the fixture, for example, closes a network connection.
+   * This method is called after a test is executed.
+   */
+  protected function tearDown()
+  {
+      \Mockery::close();
   }
 
   public function testDefaultClient()
@@ -29,7 +38,7 @@ class ValidationRequestTest extends \PHPUnit_Framework_TestCase
 
   public function testSetClient()
   {
-    $guzzleClient = $this->guzzleClient;
+    $guzzleClient = $this->guzzleClientMock;
 
     $smartyRequest = $this->smartyRequest;
     $smartyRequest->setClient($guzzleClient);
@@ -50,12 +59,65 @@ class ValidationRequestTest extends \PHPUnit_Framework_TestCase
 
   public function testValidateAddress()
   {
-    $smartyRequest = $this->smartyRequest;
-    $guzzleClient = $this->guzzleClient;
+    // arrange
 
-    $responseMock = $this->getValidResponseMock();
-    $guzzleClient->getEmitter()->attach($responseMock);
-    $smartyRequest->setClient($guzzleClient);
+    $smartyRequest = $this->smartyRequest;
+    $guzzleClient = $this->guzzleClientMock;
+    $guzzleRequest = $this->guzzleRequestMock;
+    $guzzleResponse = $this->guzzleResponseMock;
+
+    $rawResponse = '[
+  {
+    "input_index": 0,
+    "candidate_index": 0,
+    "addressee": "Apple Inc",
+    "delivery_line_1": "1 Infinite Loop",
+    "delivery_line_2": "PO Box 42",
+    "last_line": "Cupertino CA 95014-2083",
+    "delivery_point_barcode": "950142083017",
+    "components": {
+      "primary_number": "1",
+      "street_name": "Infinite",
+      "street_suffix": "Loop",
+      "city_name": "Cupertino",
+      "state_abbreviation": "CA",
+      "zipcode": "95014",
+      "plus4_code": "2083",
+      "delivery_point": "01",
+      "delivery_point_check_digit": "7"
+    },
+    "metadata": {
+      "record_type": "S",
+      "county_fips": "06085",
+      "county_name": "Santa Clara",
+      "carrier_route": "C067",
+      "congressional_district": "15",
+      "rdi": "Commercial",
+      "latitude": 37.33118,
+      "longitude": -122.03062,
+      "precision": "Zip9"
+    },
+    "analysis": {
+      "dpv_match_code": "Y",
+      "dpv_footnotes": "AABB",
+      "dpv_cmra": "N",
+      "dpv_vacant": "N",
+      "active": "Y"
+    }
+  }
+]';
+
+
+    $guzzleResponse->shouldReceive('getBody')->once()
+      ->andReturn($rawResponse);
+
+    $guzzleRequest->shouldReceive('send')->once()
+      ->andReturn($guzzleResponse);
+
+    $guzzleClient->shouldReceive('post')->once()
+      ->andReturn($guzzleRequest);
+
+    // act
 
     $addressArray = json_decode(
   	  '{
@@ -73,54 +135,9 @@ class ValidationRequestTest extends \PHPUnit_Framework_TestCase
     $smartyRequest->addAddress($address);
     $validatedAddresseResponse = $smartyRequest->validateAddresses();
 
+    // assert
     $this->assertTrue($validatedAddresseResponse->isValid(), 'response should be valid');
   }
 
-  public function getValidResponseMock()
-  {
-    $responseJson = '[
-	{
-		"input_index": 0,
-		"candidate_index": 0,
-		"addressee": "Apple Inc",
-		"delivery_line_1": "1 Infinite Loop",
-		"delivery_line_2": "PO Box 42",
-		"last_line": "Cupertino CA 95014-2083",
-		"delivery_point_barcode": "950142083017",
-		"components": {
-			"primary_number": "1",
-			"street_name": "Infinite",
-			"street_suffix": "Loop",
-			"city_name": "Cupertino",
-			"state_abbreviation": "CA",
-			"zipcode": "95014",
-			"plus4_code": "2083",
-			"delivery_point": "01",
-			"delivery_point_check_digit": "7"
-		},
-		"metadata": {
-			"record_type": "S",
-			"county_fips": "06085",
-			"county_name": "Santa Clara",
-			"carrier_route": "C067",
-			"congressional_district": "15",
-			"rdi": "Commercial",
-			"latitude": 37.33118,
-			"longitude": -122.03062,
-			"precision": "Zip9"
-		},
-		"analysis": {
-			"dpv_match_code": "Y",
-			"dpv_footnotes": "AABB",
-			"dpv_cmra": "N",
-			"dpv_vacant": "N",
-			"active": "Y"
-		}
-	}
-]';
-    $mock = new GuzzleMock([
-        new Response(200, [], Stream::factory($responseJson)),
-    ]);
-    return $mock;
-  }
+
 }

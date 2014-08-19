@@ -2,7 +2,7 @@
     "name": "deseretdigital/smartystreets-php-sdk",
     "description": "API client for SmartyStreets service",
     "require": {
-      "guzzlehttp/guzzle": "4.*"
+      "guzzlehttp/guzzle": "3.*"
     },
 
     "require-dev": {
