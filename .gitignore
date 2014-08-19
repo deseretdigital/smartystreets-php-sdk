@@ -1,0 +1,7 @@
+\.vagrant
+Vagrantfile
+build/
+output/
+phpunit.xml
+vendor
+/nbproject/*
