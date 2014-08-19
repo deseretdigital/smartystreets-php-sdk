@@ -2,6 +2,8 @@
 use \DDM\SmartyStreets\Address as Address;
 use \DDM\SmartyStreets\AddressValidationRequest as Request;
 
+use \Guzzle\Http\StaticClient as Guzzle;
+
 $authId = '556a7d9d-cfb2-462c-9647-f1e7796ef499';
 $authToken = 'eI2WlLHizcFvZrya0fZc';
 $addressArray = [

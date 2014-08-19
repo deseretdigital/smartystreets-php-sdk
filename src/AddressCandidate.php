@@ -29,9 +29,9 @@ class AddressCandidate
     $this->inputId = isset($object->input_id) ? $object->input_id : null;
     $this->inputIndex = $object->input_index;
     $this->candidateIndex = $object->candidate_index;
-    $this->addressee = $object->addressee;
+    $this->addressee = isset($object->addressee) ? $object->addressee : null;
     $this->deliveryLine1 = $object->delivery_line_1;
-    $this->deliveryLine2 = $object->delivery_line_2;
+    $this->deliveryLine2 = isset($object->delivery_line_2) ? $object->delivery_line_2 : null;
     $this->lastLine = $object->last_line;
     $this->deliveryPointBarcode = $object->delivery_point_barcode;
     $this->components = $object->components;

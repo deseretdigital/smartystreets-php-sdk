@@ -2,187 +2,195 @@
 
 namespace DDM\SmartyStreets;
 
-use GuzzleHttp\Client as GuzzleClient;
+use Guzzle\Http\Client as GuzzleClient;
 
 /**
  *
  */
 abstract class AbstractRequest
 {
-  /**
-   * [$client description]
-   * @var [type]
-   */
-  protected $client = null;
+    /**
+     * [$client description]
+     * @var [type]
+     */
+    protected $client = null;
 
-  /**
-   * [$baseUrl description]
-   * @var string
-   */
-  protected $baseUrl = 'https://api.smartystreets.com/';
+    /**
+     * [$baseUrl description]
+     * @var string
+     */
+    protected $baseUrl = 'https://api.smartystreets.com/';
 
-  /**
-   * [$endpoint description]
-   * @var string
-   */
-  protected $endpoint = '';
+    /**
+     * [$endpoint description]
+     * @var string
+     */
+    protected $endpoint = '';
 
-  /**
-   * [$queryParams description]
-   * @var [type]
-   */
-  protected $queryParams = [];
+    /**
+     * [$queryParams description]
+     * @var [type]
+     */
+    protected $queryParams = [];
 
-  /**
-   * [$headers description]
-   * @var [type]
-   */
-  protected $headers = [];
+    /**
+     * [$headers description]
+     * @var [type]
+     */
+    protected $headers = [];
 
-  /**
-   * [$authToken description]
-   * @var [type]
-   */
-  protected $authToken;
+    /**
+     * [$response description]
+     * @var [type]
+     */
+    protected $response  = null;
 
-  /**
-   * [$authId description]
-   * @var [type]
-   */
-  protected $authId;
+    /**
+     * [__construct description]
+     * @param [type] $authToken [description]
+     * @param [type] $authId    [description]
+     * @param [type] $client    [description]
+     */
+    public function __construct($authToken, $authId, \Guzzle\Http\Client $client = null)
+    {
+        $this->setQueryParam('auth-token', $authToken);
+        $this->setQueryParam('auth-id', $authId);
 
-  /**
-   * [$response description]
-   * @var [type]
-   */
-  protected $response  = null;
+        if(!is_null($client)){
+          $this->client = $client;
+        }
+    }
 
-  /**
-   * [__construct description]
-   * @param [type] $authToken [description]
-   * @param [type] $authId    [description]
-   * @param [type] $client    [description]
-   */
-  public function __construct($authToken, $authId, \GuzzleHttp\Client $client = null)
-  {
-      $this->setAuthToken($authToken);
-      $this->setAuthId($authId);
+    /**
+     * [getDefaultClient description]
+     */
+    public function getDefaultClient()
+    {
+        return new GuzzleClient($this->baseUrl);
+    }
 
-      if(!is_null($client)){
+    /**
+     * Set the client
+     * @param \GuzzleHttp\Client $client
+     */
+    public function setClient(\Guzzle\Http\Client $client)
+    {
         $this->client = $client;
-      }
-  }
-
-  /**
-   * [setAuthToken description]
-   * @param [type] $authToken [description]
-   */
-  public function setAuthToken($authToken)
-  {
-    $this->authToken = $authToken;
-    $this->setQueryParam('auth-token', $authToken);
-  }
-
-  /**
-   * [setAuthId description]
-   * @param [type] $authId [description]
-   */
-  public function setAuthId($authId)
-  {
-    $this->authId = $authId;
-    $this->setQueryParam('auth-id', $authId);
-  }
-
-  /**
-   * [getDefaultClient description]
-   */
-  public function getDefaultClient()
-  {
-    return new GuzzleClient(
-      ['base_url' => $this->baseUrl]
-    );
-  }
-
-  /**
-   * Set the client
-   * @param \GuzzleHttp\Client $client
-   */
-  public function setClient(\GuzzleHttp\Client $client)
-  {
-    $this->client = $client;
-  }
-
-  /**
-   * [getClient description]
-   */
-  public function getClient()
-  {
-    if(is_null($this->client)){
-      $this->client = $this->getDefaultClient();
-    }
-    return $this->client;
-  }
-
-  /**
-   * [getResponse description]
-   */
-  public function getResponse()
-  {
-    if(!$this->response){
-      $this->response = $this->getDefaultResponse();
     }
 
-    return $this->response;
-  }
+    /**
+     * [getClient description]
+     */
+    public function getClient()
+    {
+        if(is_null($this->client)){
+            $this->client = $this->getDefaultClient();
+        }
+        return $this->client;
+    }
 
-  /**
-   * [getDefaultResponse description]
-   */
-  abstract public function getDefaultResponse();
+    /**
+     * [getResponse description]
+     */
+    public function getResponse()
+    {
+        if(!$this->response){
+            $this->response = $this->getDefaultResponse();
+        }
 
-  /**
-   * [send description]
-   * @return [type] [description]
-   */
-  public function send()
-  {
-    $client = $this->getClient();
-    $options = [
-        'query'   => $this->getQueryParams(),
-        'headers' => $this->getHeaders(),
-        'body'    => $this->getBody(),
-    ];
-    $bodyAsString = true;
-    $result = json_decode($client->post($this->endpoint,$options)->getBody($bodyAsString));
-    $response = $this->getResponse();
-    $response->setBody($result);
+        return $this->response;
+    }
 
-    return $response;
-  }
+    /**
+     * [getDefaultResponse description]
+     */
+    abstract public function getDefaultResponse();
 
-  /**
-   * [getHeaders description]
-   */
-  public function getHeaders()
-  {
-    return $this->headers;
-  }
+    /**
+     * [send description]
+     * @return [type] [description]
+     */
+    public function send()
+    {
+        $client = $this->getClient();
 
-  /**
-   * [setQueryParam description]
-   * @param [type] $name  [description]
-   * @param [type] $value [description]
-   */
-  public function setQueryParam($name, $value)
-  {
-    $this->queryParams[$name]=$value;
-  }
+        $requestOptions = $this->getRequestOptions();
 
-  /**
-   * [getQueryParams description]
-   */
-  public function getQueryParams()
-  {
-    return $this->queryParams;
-  }
+        $request = $client->post(
+            $this->endpoint,
+            null,
+            null,
+            $requestOptions
+        );
+
+        $result = $request->send();
+
+        $bodyAsString = true;
+        $resultBody = json_decode($result->getBody($bodyAsString));
+
+        $response = $this->getResponse();
+        $response->setBody($resultBody);
+
+        return $response;
+    }
+
+    /**
+     * [getHeaders description]
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+
+    /**
+     * [setQueryParam description]
+     * @param [type] $name  [description]
+     * @param [type] $value [description]
+     */
+    public function setQueryParam($name, $value)
+    {
+        $this->queryParams[$name]=$value;
+    }
+
+    /**
+     * [getQueryParams description]
+     */
+    public function getQueryParams()
+    {
+        return $this->queryParams;
+    }
+
+    public function getRequestOptions()
+    {
+        $options = array(
+            'query'   => $this->getQueryParams(),
+            'headers' => $this->getHeaders(),
+            'body'    => $this->getBody(),
+        );
+
+        return $options;
+    }
+
+    public function getRequestUri()
+    {
+        return $this->baseUrl . $this->endpoint;
+    }
+
+    /**
+     * Getter for baseUrl
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+
+    /**
+     * Setter for baseUrl
+     * @param string $baseUrl
+     */
+    public function setBaseUrl($baseUrl)
+    {
+        $this->baseUrl = $baseUrl;
+    }
 }
