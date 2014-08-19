@@ -1,0 +1,24 @@
+{
+    "name": "deseretdigital/smartystreets-php-sdk",
+    "description": "API client for SmartyStreets service",
+    "require": {
+      "guzzlehttp/guzzle": "3.*"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "phpunit/php-invoker": "*",
+        "phpunit/phpunit-story": "*",
+
+        "mockery/mockery": "dev-master@dev",
+
+        "raveren/kint": "dev-1.0.0-wip"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "DDM\\SmartyStreets\\": "src/"
+        }
+    }
+
+}
