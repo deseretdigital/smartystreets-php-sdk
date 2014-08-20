@@ -14,13 +14,18 @@ class AddressValidationRequest extends AbstractRequest
 
   public function getAddresses()
   {
-      return $this->addresses;
+    return $this->addresses;
   }
 
   protected function getBody()
   {
-    $body = json_encode($this->addresses);
-    return $body;
+	$addressToArray = array();
+	foreach($this->addresses as $address) {
+	  $addressToArray[] = $address->toArray();
+	}
+
+	$body = json_encode($addressToArray);
+	return $body;
   }
 
   public function validateAddresses()
