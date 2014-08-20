@@ -19,4 +19,4 @@ $request->addAddress($address);
 
 $validatedAddressResponse = $request->validateAddresses();
 
-dd($validatedAddressResponse->getValidatedAddresses());
+s($validatedAddressResponse->getValidatedAddresses());
