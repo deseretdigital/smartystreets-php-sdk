@@ -40,6 +40,12 @@ abstract class AbstractRequest
     protected $headers = [];
 
     /**
+     * Request body
+     * @var mixed
+     */
+    protected $body = null;
+
+    /**
      * [$response description]
      * @var [type]
      */
@@ -150,6 +156,24 @@ abstract class AbstractRequest
     public function setQueryParam($name, $value)
     {
         $this->queryParams[$name]=$value;
+    }
+
+    /**
+     * Getter for body element
+     * @return mixed
+     */
+    public function getBody()
+    {
+        return $this->body;
+    }
+
+    /**
+     * Setter for body element
+     * @param mixed $body
+     */
+    public function setBody($body)
+    {
+        $this->body =  $body;
     }
 
     /**

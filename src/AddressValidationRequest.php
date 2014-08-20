@@ -4,34 +4,61 @@ namespace DDM\SmartyStreets;
 
 class AddressValidationRequest extends AbstractRequest
 {
-  protected $endpoint  = 'street-address';
-  protected $addresses = [];
+    protected $endpoint  = 'street-address';
+    protected $addresses = [];
 
-  public function addAddress(Address $address)
-  {
-    $this->addresses[]=$address;
-  }
+    /**
+     * Adds address to be validated
+     * @param Address $address
+     */
+    public function addAddress(Address $address)
+    {
+      $this->addresses[]=$address;
+    }
 
-  public function getAddresses()
-  {
-      return $this->addresses;
-  }
+    /**
+     * Getter for addresses
+     * @return array
+     */
+    public function getAddresses()
+    {
+        return $this->addresses;
+    }
 
-  protected function getBody()
-  {
-    $body = json_encode($this->addresses);
-    return $body;
-  }
+    /**
+     * Sends Address to be validated
+     * @return AddressResponse
+     */
+    public function validateAddresses()
+    {
+        $this->setBody($this->getSerializeAddresses());
 
-  public function validateAddresses()
-  {
-      $response = $this->send();
-      $response->setAddresses($this->getAddresses());
-      return $response;
-  }
+        $response = $this->send();
+        $response->setAddresses($this->getAddresses());
+        return $response;
+    }
 
-  public function getDefaultResponse()
-  {
-    return new AddressValidationResponse();
-  }
+    /**
+     * Returns default AddressValidationReponse
+     * @return AddressValidationResponse
+     */
+    public function getDefaultResponse()
+    {
+        return new AddressValidationResponse();
+    }
+
+    /**
+     * Json encodes address objects
+     * @return string json encoded array of address
+     */
+    public function getSerializeAddresses()
+    {
+        $addressesCollection = array();
+
+        foreach ($this->addresses as $address) {
+            $addressesCollection[] = $address->toArray();
+        }
+
+        return json_encode($addressesCollection);
+    }
 }
