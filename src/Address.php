@@ -33,95 +33,95 @@ class Address{
         $this->street = $street;
     }
 
-    /**
-     * Getter for street2
-     * @return string
-     */
-    public function getStreet2()
-    {
-        return $this->street2;
-    }
+        /**
+         * Getter for street2
+         * @return string
+         */
+        public function getStreet2()
+        {
+            return $this->street2;
+        }
 
-    /**
-     * Setter for street2
-     * @param string $street2
-     */
-    public function setStreet2($street2)
-    {
-        $this->street2 = $street2;
-    }
+        /**
+         * Setter for street2
+         * @param string $street2
+         */
+        public function setStreet2($street2)
+        {
+            $this->street2 = $street2;
+        }
 
-    /**
-     * Getter for secondary
-     * @return string
-     */
-    public function getSecondary()
-    {
-        return $this->secondary;
-    }
+        /**
+         * Getter for secondary
+         * @return string
+         */
+        public function getSecondary()
+        {
+            return $this->secondary;
+        }
 
-    /**
-     * Setter for secondary
-     * @param string $secondary
-     */
-    public function setSecondary($secondary)
-    {
-        $this->secondary = $secondary;
-    }
+        /**
+         * Setter for secondary
+         * @param string $secondary
+         */
+        public function setSecondary($secondary)
+        {
+            $this->secondary = $secondary;
+        }
 
-    /**
-     * Getter for city
-     * @return string
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
+        /**
+         * Getter for city
+         * @return string
+         */
+        public function getCity()
+        {
+            return $this->city;
+        }
 
-    /**
-     * Setter for city
-     * @param string $city
-     */
-    public function setCity($city)
-    {
-        $this->city = $city;
-    }
+        /**
+         * Setter for city
+         * @param string $city
+         */
+        public function setCity($city)
+        {
+            $this->city = $city;
+        }
 
-    /**
-     * Getter for state
-     * @return string
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
+        /**
+         * Getter for state
+         * @return string
+         */
+        public function getState()
+        {
+            return $this->state;
+        }
 
-    /**
-     * Setter for state
-     * @param string $state
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
-    }
+        /**
+         * Setter for state
+         * @param string $state
+         */
+        public function setState($state)
+        {
+            $this->state = $state;
+        }
 
-    /**
-     * Getter for zipcode
-     * @return string
-     */
-    public function getZipcode()
-    {
-        return $this->zipcode;
-    }
+        /**
+         * Getter for zipcode
+         * @return string
+         */
+        public function getZipcode()
+        {
+            return $this->zipcode;
+        }
 
-    /**
-     * Setter for zipcode
-     * @param string $zipcode
-     */
-    public function setZipcode($zipcode)
-    {
-        $this->zipcode = $zipcode;
-    }
+        /**
+         * Setter for zipcode
+         * @param string $zipcode
+         */
+        public function setZipcode($zipcode)
+        {
+            $this->zipcode = $zipcode;
+        }
 
     /**
      * Getter for addressee
@@ -146,21 +146,21 @@ class Address{
     }
 
     /**
-    * Set class data using an array
-    * Supported fields for data:
-    * -
-    * - street    = string
-    * - street2   = string
-    * - secondary = string
-    * - city      = string
-    * - state     = string
-    * - zipcode   = array
-    * - addressee = array
-    *
-    * @param array $data
-    *
-    * @return self implement fluent interface
-    */
+     * Set class data using an array
+     * Supported fields for data:
+     * -
+     * - street    = string
+     * - street2   = string
+     * - secondary = string
+     * - city      = string
+     * - state     = string
+     * - zipcode   = array
+     * - addressee = array
+     *
+     * @param array $data
+     *
+     * @return self implement fluent interface
+     */
     public function setData(array $data)
     {
         foreach($data as $key => $value) {
@@ -175,9 +175,9 @@ class Address{
     }
 
     /**
-    * Converts all properties to an array representing the logding
-    * @return array $data
-    */
+     * Converts Address into Array
+     * @return array
+     */
     public function toArray()
     {
       $properties = get_object_vars($this);
