@@ -31,13 +31,13 @@ abstract class AbstractRequest
      * [$queryParams description]
      * @var [type]
      */
-    protected $queryParams = [];
+    protected $queryParams = array();
 
     /**
      * [$headers description]
      * @var [type]
      */
-    protected $headers = [];
+    protected $headers = array();
 
     /**
      * Request body
