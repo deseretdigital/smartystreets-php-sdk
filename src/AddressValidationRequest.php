@@ -5,7 +5,7 @@ namespace DDM\SmartyStreets;
 class AddressValidationRequest extends AbstractRequest
 {
     protected $endpoint  = 'street-address';
-    protected $addresses = [];
+    protected $addresses = array();
 
     /**
      * Adds address to be validated
@@ -13,7 +13,7 @@ class AddressValidationRequest extends AbstractRequest
      */
     public function addAddress(Address $address)
     {
-      $this->addresses[]=$address;
+      $this->addresses[] = $address;
     }
 
     /**
