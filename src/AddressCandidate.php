@@ -58,10 +58,10 @@ class AddressCandidate
      */
     public function getLatAndLong()
     {
-        return [
+        return array(
           'latitude'  => $this->getLatitude(),
           'longitude' => $this->getLongitude(),
-        ];
+        );
     }
 
     /**
