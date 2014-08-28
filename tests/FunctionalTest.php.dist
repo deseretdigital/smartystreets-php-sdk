@@ -1,0 +1,24 @@
+<?php
+
+
+use \DDM\SmartyStreets\Address as Address;
+use \DDM\SmartyStreets\AddressValidationRequest as Request;
+
+use \Guzzle\Http\StaticClient as Guzzle;
+
+$authId = '<AUTH_ID>';
+$authToken = '<AUTH_TOKEN>';
+$addressArray = array(
+  'street' => '1020 Mountain Shadow Dr',
+  'city'   => 'Layton',
+  'state'  => 'Utah',
+  'zipcode' => '84040',
+);
+
+$address = new Address($addressArray);
+$request =  new Request($authToken, $authId);
+$request->addAddress($address);
+
+$validatedAddressResponse = $request->validateAddresses();
+
+s($validatedAddressResponse->getValidatedAddresses());
