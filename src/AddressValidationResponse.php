@@ -4,8 +4,8 @@ namespace DDM\SmartyStreets;
 
 class AddressValidationResponse extends AbstractResponse
 {
-  protected $validatedAddresses = [];
-  protected $candidates = [];
+  protected $validatedAddresses = array();
+  protected $candidates = array();
 
   public function isValid()
   {
@@ -38,7 +38,7 @@ class AddressValidationResponse extends AbstractResponse
   public function findCandidates($index)
   {
     $candidates = $this->getCandidates();
-    $matches = [];
+    $matches = array();
     foreach($candidates as $candidate){
       if($candidate->getInputIndex() == $index)
       {
@@ -56,7 +56,7 @@ class AddressValidationResponse extends AbstractResponse
       {
         $candidate = new AddressCandidate();
         $candidate->setFromObject($body);
-        $this->candidates[]=$candidate;
+        $this->candidates[] = $candidate;
       }
     }
     return $this->candidates;
