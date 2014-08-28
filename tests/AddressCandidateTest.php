@@ -8,7 +8,9 @@ class AddressCandidateTest extends PHPUnit_Framework_TestCase
     {
         $this->candidate = new Candidate();
         $responseJson = $this->getValidResponseJson();
-        $this->candidate->setFromObject(json_decode($responseJson)[0]);
+
+        $response = json_decode($responseJson);
+        $this->candidate->setFromObject($response[0]);
     }
 
     public function testLatitudeAndLongitude()

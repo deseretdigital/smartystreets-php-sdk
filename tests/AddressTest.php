@@ -6,12 +6,12 @@ class AddressTest extends PHPUnit_Framework_TestCase
 {
   public function testAddress()
   {
-    $addressArray = [
+    $addressArray = array(
         'street' => '123 abc',
         'city'   => 'cleveland',
         'state'  => 'ohio',
         'zipcode'    => '12345',
-    ];
+    );
 
     $address = new Address($addressArray);
     $result = $address->toArray();
