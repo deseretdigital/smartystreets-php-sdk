@@ -15,9 +15,13 @@ class ZipcodeCandidateTest extends PHPUnit_Framework_TestCase
     {
         // arrange
         $expected = array(
+            'street'    => null,
+            'street2'   => null,
+            'secondary' => null,
             'city'      => 'Los Angeles',
             'state'     => 'CA',
-            'zipcode'   => '90230'
+            'zipcode'   => '90230',
+            'addressee' => null
         );
 
         // act
