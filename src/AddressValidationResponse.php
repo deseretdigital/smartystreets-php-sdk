@@ -29,7 +29,7 @@ class AddressValidationResponse extends AbstractResponse
     {
       $validatedAddress = new ValidatedAddress($address);
       $validatedAddress->setCandidates($this->findCandidates($index));
-      $validatedAddresses[]=$validatedAddress;
+      $validatedAddresses[] = $validatedAddress;
     }
 
     return $validatedAddresses;
@@ -62,14 +62,16 @@ class AddressValidationResponse extends AbstractResponse
     return $this->candidates;
   }
 
-  public function getValidatedAddresses(){
+  public function getValidatedAddresses()
+  {
     if(!$this->validatedAddresses){
       $this->validatedAddresses = $this->mergeAddressesWithResults($this->addresses);
     }
     return $this->validatedAddresses;
   }
 
-  public function setAddresses($addresses){
+  public function setAddresses($addresses)
+  {
     $this->addresses = $addresses;
   }
 }
