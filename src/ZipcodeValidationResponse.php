@@ -1,10 +1,9 @@
 <?php
-
 namespace DDM\SmartyStreets;
 
 use DDM\SmartyStreets\ZipcodeCandidate as Candidate;
 use DDM\SmartyStreets\Address;
-use DDM\SmartyStreets\ValidatedAddress;
+use DDM\SmartyStreets\ValidatedZipcode;
 
 class ZipcodeValidationResponse extends AbstractResponse implements ValidationResponseInterface
 {
@@ -32,6 +31,14 @@ class ZipcodeValidationResponse extends AbstractResponse implements ValidationRe
      * @var array
      */
     protected $candidates = array();
+
+    protected $addresses = array();
+
+    /**
+     * Stores Validated address objects
+     * @var array
+     */
+    protected $validatedAddresses = array();
 
     /**
      * Getter for city
@@ -154,6 +161,8 @@ class ZipcodeValidationResponse extends AbstractResponse implements ValidationRe
      */
     public function hasCandidates()
     {
+        $this->getCandidates();
+
         return count($this->candidates) > 0;
     }
 
@@ -166,27 +175,23 @@ class ZipcodeValidationResponse extends AbstractResponse implements ValidationRe
         return $this->hasCandidates();
     }
 
-    /**
-     * Returns array of validated addresses
-     * @return
-     */
-    public function getValidatedAddresses()
-    {
-        if(!$this->validatedAddresses) {
-            $this->validatedAddresses = $this->mergeAddressesWithResults($this->addresses);
-        }
-
-        return $this->validatedAddresses;
-    }
-
     public function mergeAddressesWithResults($addresses)
     {
+        $validatedAddresses = array();
+
         foreach($addresses as $index => $address) {
-            $validatedAddress = new ValidatedAddress($address);
 
-            $validatedAddress->setCandidates($this->findCandidates($index));
+            $data = array(
+                'address'           => $address,
+                'city'              => $this->getCity(),
+                'state'             => $this->getState(),
+                'stateAbbreviation' => $this->getStateAbbreviation(),
+                'candidates'        => $this->getCandidates()
+            );
 
-            $validatedAddresses[] = $validatedAddress;
+            $validatedZipcode = new validatedZipcode($data);
+            $validatedZipcode->setCandidates($this->findCandidates($index));
+            $validatedAddresses[] = $validatedZipcode;
         }
 
         return $validatedAddresses;
@@ -195,15 +200,25 @@ class ZipcodeValidationResponse extends AbstractResponse implements ValidationRe
     public function findCandidates($index)
     {
         $candidates = $this->getCandidates();
-
         $matches = array();
         foreach($candidates as $candidate) {
             if($candidate->getInputIndex() == $index) {
-                $matches[] = $candidate;
+                $matches[]=$candidate;
             }
         }
-
         return $matches;
+    }
+
+    /**
+     * Returns array of validated addresses
+     * @return
+     */
+    public function getValidatedZipcodes()
+    {
+        if(!$this->validatedAddresses) {
+            $this->validatedAddresses = $this->mergeAddressesWithResults($this->addresses);
+        }
+        return $this->validatedAddresses;
     }
 
     /**
@@ -212,22 +227,29 @@ class ZipcodeValidationResponse extends AbstractResponse implements ValidationRe
      */
     public function getCandidates()
     {
-        $this->checkCorrectResponse();
 
-        if(empty($this->candidates) && $this->checkCorrectResponse()) {
+        if(empty($this->candidates) && $this->body) {
             $this->setFromObject($this->getBody());
         }
 
         return $this->candidates;
     }
 
-    public function setAddresses($addresses) {
-        $this->addresses = $addresses;
+    /**
+     * Getter for addresses
+     * @return array [description]
+     */
+    public function getAddresses()
+    {
+        return $this->addresses;
     }
 
-    protected function checkCorrectResponse()
+    /**
+     * Setter for address array of all address objects that were validated
+     * @param array $addresses
+     */
+    public function setAddresses($addresses)
     {
-        $object = current($this->body);
-        return isset($object->status) ? false : true;
+        $this->addresses = $addresses;
     }
 }

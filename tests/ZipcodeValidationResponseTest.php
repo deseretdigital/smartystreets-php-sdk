@@ -23,11 +23,12 @@ class ZipcodeValidationResponseTest extends PHPUnit_Framework_TestCase
     {
         // arrange
         $expected = array(
-            'city'              => 'Los Angeles',
-            'state'             => 'California',
-            'stateAbbreviation' => 'CA',
-            'candidates'        => null,
-            'body'              => 'test body 123'
+            'city'               => 'Los Angeles',
+            'state'              => 'California',
+            'stateAbbreviation'  => 'CA',
+            'candidates'         => null,
+            'body'               => 'test body 123',
+            'addresses'          => array()
         );
 
         // act
@@ -45,6 +46,7 @@ class ZipcodeValidationResponseTest extends PHPUnit_Framework_TestCase
         $response = json_decode($responseJson);
 
         $expectedZipcode = array(
+            'inputIndex'  => 0,
             'zipcode'     => '90230',
             'zipcodeType' => 'S',
             'countyFips'  => '06037',
@@ -54,17 +56,17 @@ class ZipcodeValidationResponseTest extends PHPUnit_Framework_TestCase
         );
 
         $expected = array(
-            'city'              => 'Los Angeles',
-            'state'             => 'California',
-            'stateAbbreviation' => 'CA',
-            'candidates'        => array($expectedZipcode),
-            'body'              => ''
+            'city'               => 'Los Angeles',
+            'state'              => 'California',
+            'stateAbbreviation'  => 'CA',
+            'candidates'         => array($expectedZipcode),
+            'body'               => '',
+            'addresses'          => array()
         );
 
         // act
         $this->response->setFromObject($response);
         $actual = $this->response->toArray();
-
 
         // assert
         $this->assertEquals($expected, $actual, 'Properties not set correctly');
@@ -122,30 +124,58 @@ class ZipcodeValidationResponseTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual, 'Failed to retrieve candidates');
     }
 
-    // public function testGetValidatedAddress()
-    // {
-    //     // arrange
-    //     $responseJson = $this->getValidResponseJson();
-    //     $response = json_decode($responseJson);
-    //     $this->response->setFromObject($response);
+    public function testGetValidatedZipcodes()
+    {
+        // arrange
+        $responseJson = $this->getValidResponseJson();
+        $response = json_decode($responseJson);
+        $this->response->setFromObject($response);
 
-    //     $expected = array(
-    //         'street'    => '123 abc',
-    //         'street2'   => 'Suite 102',
-    //         'city'      => 'Los Angeles',
-    //         'state'     => 'CA',
-    //         'zipcode'   => '90230',
-    //         'secondary' => null,
-    //         'addressee' => null
-    //     );
+        $addressData = array(
+            'street'    => null,
+            'street2'   => null,
+            'city'      => 'Los Angeles',
+            'state'     => 'CA',
+            'zipcode'   => '90230',
+            'secondary' => null,
+            'addressee' => null
+        );
 
-    //     // act
-    //     $actual = $this->response->getValidatedAddress()->toArray();
+        $addressMock = Mockery::mock('\\DDM\\SmartyStreets\\Address');
+        $addressMock->shouldReceive('toArray')->andReturn($addressData);
 
-    //     // assert
-    //     $this->assertEquals($expected, $actual, 'Address not extracted properly');
+        $this->response->setAddresses(array($addressMock));
 
-    // }
+        $expected = array(
+            'address' => $addressData,
+
+            'city'              => 'Los Angeles',
+            'state'             => 'California',
+            'stateAbbreviation' => 'CA',
+            'candidates' => array(
+                array(
+                    'inputIndex'  => 0,
+                    'zipcode'     => '90230',
+                    'zipcodeType' => 'S',
+                    'countyFips'  => '06037',
+                    'countyName'  => 'Los Angeles',
+                    'latitude'    => 33.996155,
+                    'longitude'   => -118.395494
+                )
+            )
+        );
+
+        // act
+        $validatedZipcodes = $this->response->getValidatedZipcodes();
+
+        sd($validatedZipcodes);
+
+        $actual = $validatedZipcodes[0]->toArray();
+
+        // assert
+        $this->assertEquals($expected, $actual, 'Address not extracted properly');
+
+    }
 
     protected function getValidResponseJson()
     {

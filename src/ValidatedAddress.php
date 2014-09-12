@@ -58,4 +58,6 @@ class ValidatedAddress
             $this->addCandidate($candidate);
         }
     }
+
+
 }

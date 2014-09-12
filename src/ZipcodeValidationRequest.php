@@ -2,6 +2,9 @@
 
 namespace DDM\SmartyStreets;
 
+
+use DDM\SmartyStreets\ZipcodeValidationResponse;
+
 class ZipcodeValidationRequest extends AbstractRequest
 {
     protected $endpoint  = 'zipcode';
@@ -56,9 +59,27 @@ class ZipcodeValidationRequest extends AbstractRequest
         $addressesCollection = array();
 
         foreach ($this->addresses as $address) {
-            $addressesCollection[] = $address->toArray();
+            $addressesCollection[] = $this->getZipcodeFields($address);
         }
 
         return json_encode($addressesCollection);
+    }
+
+    /**
+     * Filter out other address fields
+     * @param  Address $address
+     * @return array zipcode fiels (city,state,zipcode)
+     */
+    public function getZipcodeFields($address)
+    {
+        $includeFields = array(
+            'city'      => 1,
+            'state'     => 1,
+            'zipcode'   => 1,
+        );
+
+        $zipcodeData = array_intersect_key($address->toArray(), $includeFields);
+
+        return $zipcodeData;
     }
 }

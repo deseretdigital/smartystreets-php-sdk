@@ -27,7 +27,7 @@ class AddressValidationRequest extends AbstractRequest
 
     /**
      * Sends Address to be validated
-     * @return AddressResponse
+     * @return AddressValidationResponse
      */
     public function validateAddresses()
     {
