@@ -168,8 +168,6 @@ class ZipcodeValidationResponseTest extends PHPUnit_Framework_TestCase
         // act
         $validatedZipcodes = $this->response->getValidatedZipcodes();
 
-        sd($validatedZipcodes);
-
         $actual = $validatedZipcodes[0]->toArray();
 
         // assert

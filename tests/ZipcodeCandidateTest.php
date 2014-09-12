@@ -14,6 +14,7 @@ class ZipcodeCandidateTest extends PHPUnit_Framework_TestCase
     {
         // arrange
         $expected = array(
+            'inputIndex'  => 0,
             'zipcode'     => '90230',
             'zipcodeType' => 'S',
             'countyFips'  => '06037',
@@ -36,6 +37,7 @@ class ZipcodeCandidateTest extends PHPUnit_Framework_TestCase
         $response = json_decode($responseJson);
 
         $expected = array(
+            'inputIndex'  => 0,
             'zipcode'     => '90230',
             'zipcodeType' => 'S',
             'countyFips'  => '06037',
@@ -43,8 +45,6 @@ class ZipcodeCandidateTest extends PHPUnit_Framework_TestCase
             'latitude'    => 33.996155,
             'longitude'   => -118.395494
         );
-
-        $this->candidate->setBody($)
 
         // act
 

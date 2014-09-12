@@ -17,7 +17,7 @@ class ZipcodeCandidate extends AbstractModel
      * Extend default constructor to provide setFromObject
      * @param mixed $data
      */
-    public function __construct($data)
+    public function __construct($data=array())
     {
         if (is_object($data)) {
             $this->setFromObject($data);
