@@ -2,178 +2,170 @@
 
 namespace DDM\SmartyStreets;
 
-class ZipcodeCandidate
+
+class ZipcodeCandidate extends AbstractModel
 {
-    protected $inputIndex;
-    protected $cityStates;
-    protected $zipcodes;
+    protected $zipcode;
+    protected $zipcodeType;
+    protected $countyFips;
+    protected $countyName;
+    protected $latitude;
+    protected $longitude;
+
+    /**
+     * Extend default constructor to provide setFromObject
+     * @param mixed $data
+     */
+    public function __construct($data)
+    {
+        if (is_object($data)) {
+            $this->setFromObject($data);
+        } else {
+            parent::__construct($data);
+        }
+    }
 
     /**
      * Sets properties using smartystreets response object
      *
      * Supported fields for $object
      * -
-     * - inputIndex           = int
-     * - cityStates           = object
-     * - zipcodes             = object
+     *
+     *
      *
      * @param object $object smartystreets response object
      */
     public function setFromObject($object)
     {
-        $this->inputIndex = $object->input_index;
-        $this->cityStates = $object->city_states;
-        $this->zipcodes   = $object->zipcodes;
+        $data = array(
+            'zipcode'     => isset($object->zipcode) ? $object->zipcode : null,
+            'zipcodeType' => isset($object->zipcode_type) ? $object->zipcode_type : null,
+            'countyFips'  => isset($object->county_fips) ? $object->county_fips : null,
+            'countyName'  => isset($object->county_name) ? $object->county_name : null,
+            'latitude'    => isset($object->latitude) ? $object->latitude : null,
+            'longitude'   => isset($object->longitude) ? $object->longitude : null
+        );
+
+        $this->setData($data);
     }
 
     /**
-     * Getter for city_states object
-     *
-     * Component fields:
-     * -
-     * - city                = string
-     * - state_abbreviation  = string
-     * - state               = string
-     *
-     * @return object contains all city_states info (city, state, zipcode)
-     */
-    public function getCityStates()
-    {
-        return $this->cityStates[0];
-    }
-
-    /**
-     * Getter for zipcode
+     * Getter for zipcode_type
      * @return string
      */
     public function getZipcode()
     {
-        return $this->zipcodes[0]->zipcode;
-    }
-
-    /**
-     * Getter for zipcode type
-     * @return string
-     */
-    public function getZipcodeType()
-    {
-        return $this->zipcodes[0]->zipcode_type;
-    }
-
-    /**
-     * Getter for county fips
-     * @return string
-     */
-    public function getCountyFips()
-    {
-        return $this->zipcodes[0]->county_fips;
-    }
-
-    /**
-     * Getter for county name
-     * @return string
-     */
-    public function getCountyName()
-    {
-        return $this->zipcodes[0]->county_name;
-    }
-
-    /**
-     * Getter for latitude
-     * @return float
-     */
-    public function getLatitude()
-    {
-        return $this->zipcodes[0]->latitude;
-    }
-
-    /**
-     * Getter for longitude
-     * @return float
-     */
-    public function getLongitude()
-    {
-        return $this->zipcodes[0]->longitude;
+        return $this->zipcode;
     }
 
     /**
      * Setter for zipcode
-     *
-     * @param string
+     * @param string $zipcode
      */
     public function setZipcode($zipcode)
     {
-        $this->zipcodes[0]->zipcode = $zipcode;
+        $this->zipcode = $zipcode;
     }
 
     /**
-     * Setter for zipcode type
-     *
-     * @param string
+     * Getter for zipcodeType
+     * @return string
+     */
+    public function getZipcodeType()
+    {
+        return $this->zipcodeType;
+    }
+
+    /**
+     * Setter for zipcodeType
+     * @param string $zipcodeType
      */
     public function setZipcodeType($zipcodeType)
     {
-        $this->zipcodes[0]->zipcode_type = $zipcodeType;
+        $this->zipcodeType = $zipcodeType;
     }
 
     /**
-     * Setter for county fips
-     *
-     * @param string
+     * Getter for countyFips
+     * @return string
+     */
+    public function getCountyFips()
+    {
+        return $this->countyFips;
+    }
+
+    /**
+     * Setter for countyFips
+     * @param string $countyFips
      */
     public function setCountyFips($countyFips)
     {
-        $this->zipcodes[0]->county_fips = $countyFips;
+        $this->countyFips = $countyFips;
     }
 
     /**
-     * Setter for county name
-     *
-     * @param string
+     * Getter for countyName
+     * @return string
+     */
+    public function getCountyName()
+    {
+        return $this->countyName;
+    }
+
+    /**
+     * Setter for countyName
+     * @param string $countyName
      */
     public function setCountyName($countyName)
     {
-        $this->zipcodes[0]->county_name = $countyName;
+        $this->countyName = $countyName;
+    }
+
+    /**
+     * Getter for latitude
+     * @return string
+     */
+    public function getLatitude()
+    {
+        return $this->latitude;
     }
 
     /**
      * Setter for latitude
-     *
-     * @param float
+     * @param string $latitude
      */
     public function setLatitude($latitude)
     {
-        $this->zipcodes[0]->latitude = $latitude;
+        $this->latitude = $latitude;
+    }
+
+    /**
+     * Getter for longitude
+     * @return string
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
     }
 
     /**
      * Setter for longitude
-     *
-     * @param float
+     * @param string $longitude
      */
     public function setLongitude($longitude)
     {
-        $this->zipcodes[0]->longitude = $longitude;
+        $this->longitude = $longitude;
     }
 
     /**
-    * Returns Address object from candidate data
-    * @return Address
-    */
-    public function getAddress()
+     * Convenience method for extracting both lat and lon
+     * @return array
+     */
+    public function getLatAndLong()
     {
-        $cityStates = $this->getCityStates();
-
-        $address = new Address(array(
-            'street'  => null,
-            'street2' => null,
-            'city'    => $cityStates->city,
-            'state'   => $cityStates->state_abbreviation,
-            'zipcode' => $this->getZipcode(),
-            'secondary' => null,
-            'addressee' => null
-        ));
-
-        return $address;
+        return array(
+          'latitude'  => $this->getLatitude(),
+          'longitude' => $this->getLongitude(),
+        );
     }
 }

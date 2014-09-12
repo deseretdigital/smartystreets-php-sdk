@@ -2,7 +2,7 @@
 
 namespace DDM\SmartyStreets;
 
-class AddressValidationResponse extends AbstractResponse
+class AddressValidationResponse extends AbstractResponse implements ValidationResponseInterface
 {
   protected $validatedAddresses = array();
   protected $candidates = array();

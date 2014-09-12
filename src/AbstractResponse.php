@@ -2,20 +2,29 @@
 
 namespace DDM\SmartyStreets;
 
-abstract class AbstractResponse
+abstract class AbstractResponse extends AbstractModel
 {
-  protected $body = '';
+    protected $body = '';
 
-  public function __construct($body = '')
-  {
-    $this->body = $body;
-  }
+    /**
+     * Getter for body
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->body;
+    }
 
-  public function setBody($body)
-  {
-    $this->body = $body;
-  }
-  
-  abstract public function isValid();
+    /**
+     * Setter for body
+     * @param string $body
+     */
+    public function setBody($body)
+    {
+        $this->body = $body;
+    }
+
+
+
 
 }

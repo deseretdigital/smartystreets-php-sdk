@@ -7,54 +7,66 @@ class ZipcodeCandidateTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->candidate = new Candidate();
-        $responseJson = $this->getValidResponseJson();
-        $this->candidate->setFromObject(json_decode($responseJson)[0]);
+
     }
 
-    public function testGetAddress()
+    public function testSetData()
     {
         // arrange
         $expected = array(
-            'street'    => null,
-            'street2'   => null,
-            'secondary' => null,
-            'city'      => 'Los Angeles',
-            'state'     => 'CA',
-            'zipcode'   => '90230',
-            'addressee' => null
+            'zipcode'     => '90230',
+            'zipcodeType' => 'S',
+            'countyFips'  => '06037',
+            'countyName'  => 'Los Angeles',
+            'latitude'    => 33.996155,
+            'longitude'   => -118.395494
         );
 
         // act
-        $actual = $this->candidate->getAddress()->toArray();
+        $actual = $this->candidate->setData($expected)->toArray();
 
         // assert
         $this->assertEquals($expected, $actual, 'These should match');
     }
 
+    public function testSetFromObject()
+    {
+        // arrange
+        $responseJson = $this->getValidResponseJson();
+        $response = json_decode($responseJson);
+
+        $expected = array(
+            'zipcode'     => '90230',
+            'zipcodeType' => 'S',
+            'countyFips'  => '06037',
+            'countyName'  => 'Los Angeles',
+            'latitude'    => 33.996155,
+            'longitude'   => -118.395494
+        );
+
+        $this->candidate->setBody($)
+
+        // act
+
+        $this->candidate->setFromObject($response);
+        $actual = $this->candidate->toArray();
+
+        // assert
+        $this->assertEquals($expected, $actual, 'Properties not set correctly');
+    }
+
     protected function getValidResponseJson()
     {
-        $responseJson = '[
+        $responseJsonPartial = '
         {
-            "input_index": 0,
-            "city_states": [
-                {
-                    "city": "Los Angeles",
-                    "state_abbreviation": "CA",
-                    "state": "California"
-                }
-            ],
-            "zipcodes": [
-                {
-                    "zipcode": "90230",
-                    "zipcode_type": "S",
-                    "county_fips": "06037",
-                    "county_name": "Los Angeles",
-                    "latitude": 33.996155,
-                    "longitude": -118.395494
-                }
-            ]
-        }]';
+            "zipcode": "90230",
+            "zipcode_type": "S",
+            "county_fips": "06037",
+            "county_name": "Los Angeles",
+            "latitude": 33.996155,
+            "longitude": -118.395494
+        }';
 
-        return $responseJson;
+        return $responseJsonPartial;
     }
 }

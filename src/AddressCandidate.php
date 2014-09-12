@@ -220,7 +220,7 @@ class AddressCandidate
      * - active         = string
      * - footnotes      = string
      *
-     * @return [type] [description]
+     * @return object
      */
     public function getAnalysis()
     {
