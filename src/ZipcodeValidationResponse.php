@@ -88,20 +88,6 @@ class ZipcodeValidationResponse extends AbstractResponse implements ValidationRe
     }
 
     /**
-     * Getter for candidates
-     * @return array
-     */
-    public function getCandidates()
-    {
-
-        if(empty($this->candidates) && !empty($this->body)) {
-            $this->setFromObject($this->getBody());
-        }
-
-        return $this->candidates;
-    }
-
-    /**
      * Setter for candidates
      * @param array $candidates
      */
@@ -116,7 +102,6 @@ class ZipcodeValidationResponse extends AbstractResponse implements ValidationRe
      */
     public function setFromObject($object)
     {
-
         if (isset($object[0]->city_states)) {
             $cityObject = $object[0]->city_states[0];
 
@@ -130,10 +115,12 @@ class ZipcodeValidationResponse extends AbstractResponse implements ValidationRe
         }
 
         if (isset($object[0]->zipcodes)) {
-            $zipcodes = $object[0]->zipcodes;
+            $zipcodes   = $object[0]->zipcodes;
+            $inputIndex = $object[0]->input_index;
 
             $zipcodeCandidates = array();
             foreach ($zipcodes as $zipcodeObject) {
+                $zipcodeObject->input_index = $inputIndex;
                 $zipcodeCandidates[] = new Candidate($zipcodeObject);
             }
 
@@ -179,30 +166,68 @@ class ZipcodeValidationResponse extends AbstractResponse implements ValidationRe
         return $this->hasCandidates();
     }
 
-
     /**
      * Returns array of validated addresses
      * @return
      */
     public function getValidatedAddresses()
     {
-        $candidates = $this->getCandidates();
+        if(!$this->validatedAddresses) {
+            $this->validatedAddresses = $this->mergeAddressesWithResults($this->addresses);
+        }
 
-
-
-        $address = new Address(array(
-            'city'      => $this->getCity(),
-            'state'     => $this->getState(),
-            'zipcode'   => null, // use first zipcode from candidates
-
-        ));
-
-
-        $validatedAddress = new ValidatedAddress(
-            $address,
-            $candidates
-        );
-
+        return $this->validatedAddresses;
     }
 
+    public function mergeAddressesWithResults($addresses)
+    {
+        foreach($addresses as $index => $address) {
+            $validatedAddress = new ValidatedAddress($address);
+
+            $validatedAddress->setCandidates($this->findCandidates($index));
+
+            $validatedAddresses[] = $validatedAddress;
+        }
+
+        return $validatedAddresses;
+    }
+
+    public function findCandidates($index)
+    {
+        $candidates = $this->getCandidates();
+
+        $matches = array();
+        foreach($candidates as $candidate) {
+            if($candidate->getInputIndex() == $index) {
+                $matches[] = $candidate;
+            }
+        }
+
+        return $matches;
+    }
+
+    /**
+     * Getter for candidates
+     * @return array
+     */
+    public function getCandidates()
+    {
+        $this->checkCorrectResponse();
+
+        if(empty($this->candidates) && $this->checkCorrectResponse()) {
+            $this->setFromObject($this->getBody());
+        }
+
+        return $this->candidates;
+    }
+
+    public function setAddresses($addresses) {
+        $this->addresses = $addresses;
+    }
+
+    protected function checkCorrectResponse()
+    {
+        $object = current($this->body);
+        return isset($object->status) ? false : true;
+    }
 }

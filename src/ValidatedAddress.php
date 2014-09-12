@@ -47,7 +47,7 @@ class ValidatedAddress
         return (count($this->candidates) > 0);
     }
 
-    public function addCandidate(AddressCandidate $candidate)
+    public function addCandidate($candidate)
     {
         $this->candidates[] = $candidate;
     }

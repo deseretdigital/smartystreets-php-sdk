@@ -9,7 +9,8 @@ abstract class AbstractModel
      * General use constructor
      * @param array $data [description]
      */
-    public function __construct($data=array()){
+    public function __construct($data=array())
+    {
         $this->setData($data);
     }
 

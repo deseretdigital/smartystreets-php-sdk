@@ -5,6 +5,7 @@ namespace DDM\SmartyStreets;
 
 class ZipcodeCandidate extends AbstractModel
 {
+    protected $inputIndex;
     protected $zipcode;
     protected $zipcodeType;
     protected $countyFips;
@@ -38,6 +39,7 @@ class ZipcodeCandidate extends AbstractModel
     public function setFromObject($object)
     {
         $data = array(
+            'inputIndex'  => isset($object->input_index) ? $object->input_index : null,
             'zipcode'     => isset($object->zipcode) ? $object->zipcode : null,
             'zipcodeType' => isset($object->zipcode_type) ? $object->zipcode_type : null,
             'countyFips'  => isset($object->county_fips) ? $object->county_fips : null,
@@ -47,6 +49,23 @@ class ZipcodeCandidate extends AbstractModel
         );
 
         $this->setData($data);
+    }
+
+    /**
+     * Getter for inputIndex
+     * @return int Input position
+     */
+    public function getInputIndex()
+    {
+        return $this->inputIndex;
+    }
+
+    /**
+     * Setter for inputIndex
+     */
+    public function setInputIndex($inputIndex)
+    {
+        $this->inputIndex = $inputIndex;
     }
 
     /**
