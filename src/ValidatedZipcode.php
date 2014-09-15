@@ -108,6 +108,15 @@ class ValidatedZipcode extends AbstractModel
     }
 
     /**
+     * Query method for determining if we have candidates
+     * @return boolean
+     */
+    public function hasCandidates()
+    {
+        return (count($this->candidates) > 0);
+    }
+
+    /**
      * Getter for address
      * @return Address Origional address
      */
