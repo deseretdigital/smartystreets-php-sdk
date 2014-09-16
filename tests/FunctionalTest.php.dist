@@ -1,0 +1,43 @@
+<?php
+
+
+use \DDM\SmartyStreets\Address as Address;
+use \DDM\SmartyStreets\AddressValidationRequest as Request;
+
+use \Guzzle\Http\StaticClient as Guzzle;
+
+$authId = '<AUTH_ID>';
+$authToken = '<AUTH_TOKEN>';
+
+s('Test Address validation');
+
+$addressArray = array(
+  'street' => 'Layton Utah 84040',
+  'city'   => 'Layton',
+  'state'  => 'Utah',
+  'zipcode' => '84040',
+);
+
+$address = new Address($addressArray);
+$request =  new AddressValidationRequest($authToken, $authId);
+$request->addAddress($address);
+
+$validatedAddressResponse = $request->validateAddresses();
+
+s($validatedAddressResponse->getValidatedAddresses());
+
+s('Test Zipcode validation');
+
+$zipcodeData = array(
+  'city'   => 'Layton',
+  'state'  => 'Utah',
+  'zipcode' => '84040',
+);
+
+$zipcodeAddress = new Address($zipcodeData);
+$request =  new ZipcodeValidationRequest($authToken, $authId);
+$request->addAddress($address);
+
+$validatedAddressResponse = $request->validateAddresses();
+
+s($validatedAddressResponse->getValidatedZipcodes());

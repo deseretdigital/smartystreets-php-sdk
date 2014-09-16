@@ -2,12 +2,13 @@
 
 namespace DDM\SmartyStreets;
 
+use DDM\SmartyStreets\AddressValidationRequest;
 use Guzzle\Http\Client as GuzzleClient;
 use Guzzle\Http\Message\Response;
 use Guzzle\Http\Stream\Stream;
 
 
-class ValidationRequestTest extends \PHPUnit_Framework_TestCase
+class AddressValidationRequestTest extends \PHPUnit_Framework_TestCase
 {
 
   public function setUp()

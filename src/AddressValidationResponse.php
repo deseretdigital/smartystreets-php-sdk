@@ -2,74 +2,76 @@
 
 namespace DDM\SmartyStreets;
 
-class AddressValidationResponse extends AbstractResponse
+class AddressValidationResponse extends AbstractResponse implements ValidationResponseInterface
 {
-  protected $validatedAddresses = array();
-  protected $candidates = array();
+    protected $validatedAddresses = array();
+    protected $candidates = array();
 
-  public function isValid()
-  {
-    $valid = true;
-    if(count($this->getValidatedAddresses()) == 0){
-      $valid = false;
-    }
-    if($valid){
-      foreach($this->validatedAddresses as $address){
-        if(!$address->hasCandidates()){
-          return false;
+    public function isValid()
+    {
+        $valid = true;
+        if(count($this->getValidatedAddresses()) == 0){
+            $valid = false;
         }
-      }
+        if($valid){
+            foreach($this->validatedAddresses as $address){
+              if(!$address->hasCandidates()){
+                return false;
+              }
+            }
+        }
+        return $valid;
     }
-    return $valid;
-  }
 
-  public function mergeAddressesWithResults($addresses)
-  {
-    foreach($addresses as $index => $address)
+    public function mergeAddressesWithResults($addresses)
     {
-      $validatedAddress = new ValidatedAddress($address);
-      $validatedAddress->setCandidates($this->findCandidates($index));
-      $validatedAddresses[]=$validatedAddress;
+        foreach($addresses as $index => $address)
+        {
+            $validatedAddress = new ValidatedAddress($address);
+            $validatedAddress->setCandidates($this->findCandidates($index));
+            $validatedAddresses[] = $validatedAddress;
+        }
+
+        return $validatedAddresses;
     }
 
-    return $validatedAddresses;
-  }
-
-  public function findCandidates($index)
-  {
-    $candidates = $this->getCandidates();
-    $matches = array();
-    foreach($candidates as $candidate){
-      if($candidate->getInputIndex() == $index)
-      {
-        $matches[]=$candidate;
-      }
-    }
-    return $matches;
-  }
-
-  public function getCandidates()
-  {
-    if($this->body && !$this->candidates)
+    public function findCandidates($index)
     {
-      foreach($this->body as $body)
-      {
-        $candidate = new AddressCandidate();
-        $candidate->setFromObject($body);
-        $this->candidates[] = $candidate;
-      }
+        $candidates = $this->getCandidates();
+        $matches = array();
+        foreach($candidates as $candidate){
+            if($candidate->getInputIndex() == $index)
+            {
+                $matches[]=$candidate;
+            }
+        }
+        return $matches;
     }
-    return $this->candidates;
-  }
 
-  public function getValidatedAddresses(){
-    if(!$this->validatedAddresses){
-      $this->validatedAddresses = $this->mergeAddressesWithResults($this->addresses);
+    public function getCandidates()
+    {
+        if($this->body && !$this->candidates)
+        {
+            foreach($this->body as $body)
+            {
+                $candidate = new AddressCandidate();
+                $candidate->setFromObject($body);
+                $this->candidates[] = $candidate;
+            }
+        }
+        return $this->candidates;
     }
-    return $this->validatedAddresses;
-  }
 
-  public function setAddresses($addresses){
-    $this->addresses = $addresses;
-  }
+    public function getValidatedAddresses()
+    {
+        if(!$this->validatedAddresses){
+            $this->validatedAddresses = $this->mergeAddressesWithResults($this->addresses);
+        }
+        return $this->validatedAddresses;
+    }
+
+    public function setAddresses($addresses)
+    {
+        $this->addresses = $addresses;
+    }
 }
