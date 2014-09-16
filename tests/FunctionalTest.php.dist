@@ -8,17 +8,36 @@ use \Guzzle\Http\StaticClient as Guzzle;
 
 $authId = '<AUTH_ID>';
 $authToken = '<AUTH_TOKEN>';
+
+s('Test Address validation');
+
 $addressArray = array(
-  'street' => '1020 Mountain Shadow Dr',
+  'street' => 'Layton Utah 84040',
   'city'   => 'Layton',
   'state'  => 'Utah',
   'zipcode' => '84040',
 );
 
 $address = new Address($addressArray);
-$request =  new Request($authToken, $authId);
+$request =  new AddressValidationRequest($authToken, $authId);
 $request->addAddress($address);
 
 $validatedAddressResponse = $request->validateAddresses();
 
 s($validatedAddressResponse->getValidatedAddresses());
+
+s('Test Zipcode validation');
+
+$zipcodeData = array(
+  'city'   => 'Layton',
+  'state'  => 'Utah',
+  'zipcode' => '84040',
+);
+
+$zipcodeAddress = new Address($zipcodeData);
+$request =  new ZipcodeValidationRequest($authToken, $authId);
+$request->addAddress($address);
+
+$validatedAddressResponse = $request->validateAddresses();
+
+s($validatedAddressResponse->getValidatedZipcodes());

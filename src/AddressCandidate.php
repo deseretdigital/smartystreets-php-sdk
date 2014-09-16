@@ -152,7 +152,7 @@ class AddressCandidate
      * - delivery_point             = string
      * - delivery_point_check_digit = string
      *
-     * @return object contains all candidat address components (ie city, state, zipcode etc)
+     * @return object contains all candidate address components (ie city, state, zipcode etc)
      */
     public function getComponents()
     {
@@ -220,7 +220,7 @@ class AddressCandidate
      * - active         = string
      * - footnotes      = string
      *
-     * @return [type] [description]
+     * @return object
      */
     public function getAnalysis()
     {
