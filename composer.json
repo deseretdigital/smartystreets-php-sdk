@@ -1,6 +1,7 @@
 {
     "name": "deseretdigital/smartystreets-php-sdk",
     "description": "API client for SmartyStreets service",
+    "license": "MIT",
     "require": {
       "guzzlehttp/guzzle": "3.*"
     },
