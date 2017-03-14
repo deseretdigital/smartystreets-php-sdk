@@ -3,7 +3,7 @@
     "description": "API client for SmartyStreets service",
     "license": "MIT",
     "require": {
-      "guzzle/guzzle": "3.*"
+        "guzzlehttp/guzzle": "^6.2"
     },
 
     "require-dev": {
